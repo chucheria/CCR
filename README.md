@@ -7,6 +7,7 @@ Desarrollo de arte con código y arte matemático con R.
 - Atractor de Clifford
 - Atractor de DeJong
 - Atractor de Lorenz
+- Atractor de Rossler
 - Rosas polares (por refinar)
 
 ## TODO:
