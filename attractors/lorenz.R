@@ -1,7 +1,15 @@
 library(deSolve)
-library(ggplot2)
-library(gridExtra)
-library(ggthemes)
+library(viridis)
+library(scatterplot3d)
+
+library(rgl)
+
+myColorRamp <- function(colors, values) {
+  v <- (values - min(values))/diff(range(values))
+  x <- colorRamp(colors)(v)
+  rgb(x[,1], x[,2], x[,3], maxColorValue = 255)
+}
+
 
 Lorenz <- function(t, state, parameters) {
   with(as.list(c(state, parameters)), {
@@ -19,37 +27,10 @@ r <- c(28)
 b <- c(8/3)
 params <- data.frame(s = s, r = r, b = b)
 
-t <- seq(0.01, 1000, by = 0.01)
-out <- as.data.frame(ode(y = iniState, 
-                         times = t, 
-                         func = Lorenz, 
-                         parms = params[1,]))
+t <- seq(0.01, 10000, by = 0.01)
+cvec <- myColorRamp(c(viridis(5)[1],viridis(5)[2]), t) 
 
-
-xplot <- ggplot(data = out, aes(time, X)) +
-  geom_line() +
-  theme_tufte(ticks=FALSE)
-
-yplot <- ggplot(data = out, aes(time, Y)) +
-  geom_line() +
-  theme_tufte(ticks=FALSE)
-
-zplot <- ggplot(data = out, aes(time, Z)) +
-  geom_line() +
-  theme_tufte(ticks=FALSE)
-
-lauplot <- ggplot(data = out, aes(Y, Z)) + 
-  geom_point(size = 0.2) +
-  theme_tufte(ticks=FALSE)
-
-grid.arrange(xplot, yplot, zplot, lauplot, nrow = 2)
-
-
-## 3D
-
-library(scatterplot3d)
-
-sequenceLaurence <- function(t) {
+sequenceLaurence <- function(t, color) {
   out <- as.data.frame(ode(y = iniState, 
                            times = t, 
                            func = Lorenz, 
@@ -58,8 +39,8 @@ sequenceLaurence <- function(t) {
   scatterplot3d(x=out[,2],
                 y=out[,3],
                 z=out[,4],
-                color="red",
-                type="l",
+                color=color,
+                type="p",
                 box=FALSE,
                 highlight.3d=F,
                 grid=F,
@@ -70,4 +51,10 @@ sequenceLaurence <- function(t) {
                 main=NULL)
 }
 
-sequenceLaurence(t)
+
+
+
+png(filename = "images/lorenz1.png", width = 1200, height = 1200, pointsize = 0.1)
+sequenceLaurence(t,cvec)
+dev.off()
+
