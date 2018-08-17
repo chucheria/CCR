@@ -32,10 +32,10 @@ dejong <- function(x, y) {
   mat <<- mat + counts
 }
 
-npoints <- 1000
+npoints <- 10e3
 n <- 100000
-width <- 600
-height <- 600
+width <- 800
+height <- 800
 
 #make some random points
 rsamp <- matrix(runif(n * 2, min=-2, max=2), nr=n)
@@ -44,70 +44,32 @@ setCompilerOptions(suppressAll=TRUE)
 mapxy <- cmpfun(mapxy)
 dejong <- cmpfun(dejong)
 
-# 0
-a <- 0.970
-b <- -1.899
-c <- 1.381
-d <- -1.506
-
-cvec <- viridis(100)
-
-mat <- matrix(0, nr=height, nc=width)
-dejong(rsamp[,1], rsamp[,2])
-dens <- log(mat + 1)/log(max(mat))
-par(mar=c(0, 0, 0, 0))
-
-png(filename = "dejong0.png", width = 1200, height = 1200, pointsize = 0.1)
-image(t(dens), col=cvec, useRaster=T, xaxt='n', yaxt='n')
-dev.off()
-
-# 1
-a <- -2
-b <- -2
-c <- -1.2
-d <- 2
-
+# Colors
 cvec <- magma(100)
 
-mat <- matrix(0, nr=height, nc=width)
-dejong(rsamp[,1], rsamp[,2])
-dens <- log(mat + 1)/log(max(mat))
-par(mar=c(0, 0, 0, 0))
+# Initial set up (a, b, c, d)
+set.seed(3)
+initialvalues <- data.frame(replicate(4,round(runif(10, min=-3, max=4), 1)))
 
-png(filename = "dejong1.png", width = 1200, height = 1200, pointsize = 0.1)
-image(t(dens), col=cvec, useRaster=T, xaxt='n', yaxt='n')
-dev.off()
+for (i in 1:nrow(initialvalues)) {
+  a <- initialvalues[i,1]
+  b <- initialvalues[i,2]
+  c <- initialvalues[i,3]
+  d <- initialvalues[i,4]
+  
+  cat("Iteration: ", i)
+  cat("a: ", a, "b: ", b, "c: ", c, "d: ", d)
+  
+  mat <- matrix(0, nr=height, nc=width)
+  dejong(rsamp[,1], rsamp[,2])
+  dens <- log(mat + 1)/log(max(mat))
+  
+  par(mar=c(0, 0, 0, 0))
+  png(filename = paste0("images/NewDejong", i, ".png"), width = 1200, 
+      height = 1200, pointsize = 0.1)
+  image(t(dens), col=cvec, useRaster=T, xaxt='n', yaxt='n')
+  dev.off()
+  
+  cat('Generated image ', i)
+}
 
-# 2
-a <- 1.40
-b <- 1.56
-c <- 1.40
-d <- -6.56
-
-cvec <- inferno(100)
-
-mat <- matrix(0, nr=height, nc=width)
-dejong(rsamp[,1], rsamp[,2])
-dens <- log(mat + 1)/log(max(mat))
-par(mar=c(0, 0, 0, 0))
-
-png(filename = "dejong2.png", width = 1200, height = 1200, pointsize = 0.1)
-image(t(dens), col=cvec, useRaster=T, xaxt='n', yaxt='n')
-dev.off()
-
-# 3
-a <- 1.4
-b <- -2.3
-c <- 2.4
-d <- -2.1
-
-cvec <- plasma(100)
-
-mat <- matrix(0, nr=height, nc=width)
-dejong(rsamp[,1], rsamp[,2])
-dens <- log(mat + 1)/log(max(mat))
-par(mar=c(0, 0, 0, 0))
-
-png(filename = "dejong3.png", width = 1200, height = 1200, pointsize = 0.1)
-image(t(dens), col=cvec, useRaster=T, xaxt='n', yaxt='n')
-dev.off()
