@@ -2,6 +2,12 @@
 
 Desarrollo de arte con código y arte matemático con R.
 
+## Recursos
+
+- [Awesome Creative Coding](https://github.com/terkelg/awesome-creative-coding)
+- [Antonio Sánchez Blog](https://fronkonstin.com/)
+- [Thomas Lin packages](https://github.com/thomasp85/)
+
 ## Implementado:
 
 - Atractor de Clifford
@@ -14,6 +20,10 @@ Desarrollo de arte con código y arte matemático con R.
 
 - Fractales
 - Diagramas de voronoi
-- Generativos
+- Animados
   - Perlin noise + curvas de bezier
 - Machine learning
+
+## Presentación en LatinR
+
+[Link](https://docs.google.com/presentation/d/1MalLj2YrKcFeH93QOFfQNjZI-qz1lp7Px3VNHJtO2dc/edit?usp=sharing)
